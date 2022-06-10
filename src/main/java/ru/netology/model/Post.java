@@ -4,6 +4,16 @@ public class Post {
   private long id;
   private String content;
 
+  private transient boolean removed;
+
+  public boolean isRemoved() {
+    return removed;
+  }
+
+  public void setRemoved(boolean removed) {
+    this.removed = removed;
+  }
+
   public Post() {
   }
 
