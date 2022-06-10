@@ -7,19 +7,26 @@ import ru.netology.model.Post;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.stream.Collectors;
 
 @Repository
 public class PostRepository {
-    private final ConcurrentHashMap<Long, Post> map = new ConcurrentHashMap<>();
-    private final AtomicLong counter = new AtomicLong(1);
+    private final long INITIAL_COUNT = 1;
+    private final ConcurrentHashMap<Long, Post> map;
+    private final AtomicLong counter;
+
+    public PostRepository() {
+        map = new ConcurrentHashMap<>();
+        counter = new AtomicLong(INITIAL_COUNT);
+    }
 
     public List<Post> all() {
-        return new ArrayList<>(map.values());
+        return map.values().stream().filter(value -> !value.isRemoved()).collect(Collectors.toList());
     }
 
     public Optional<Post> getById(long id) {
         var post = map.get(id);
-        if (post != null) return Optional.of(post);
+        if (post != null && !post.isRemoved()) return Optional.of(post);
         else return Optional.empty();
     }
 
@@ -31,7 +38,7 @@ public class PostRepository {
             map.put(postId, post);
             return post;
         }
-        if (map.containsKey(id)) {
+        if (map.containsKey(id) && !map.get(id).isRemoved()) {
             map.put(id, post);
             return post;
         }
@@ -39,6 +46,11 @@ public class PostRepository {
     }
 
     public void removeById(long id) {
-        map.remove(id);
+        var post = map.get(id);
+        if (post == null) {
+            throw new NotFoundException();
+        } else {
+            post.setRemoved(true);
+        }
     }
 }
