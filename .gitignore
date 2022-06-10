@@ -5,7 +5,6 @@ target/
 
 ### IntelliJ IDEA ###
 .idea/*
-.gitignore
 
 ### Eclipse ###
 .apt_generated
