@@ -5,10 +5,7 @@ target/
 
 ### IntelliJ IDEA ###
 .idea/*
-<<<<<<< HEAD
 .gitignore
-=======
->>>>>>> 478eaa872482e20003c7b362c10a77fd96b4aad9
 
 ### Eclipse ###
 .apt_generated
